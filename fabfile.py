@@ -26,27 +26,29 @@ def hello():
 @task
 def setup():
     """初始化工具包"""
-    puts(green('配置Ruby'))
+    puts(green('配置 RubyGems'))
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
     local('gem sources -l')
     puts(green('安装'))
     local('sudo gem install cocoapods')
-    puts(green('配置Homebrew'))
+    puts(green('配置 Homebrew'))
     local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     local('brew install python3 bash-completion memcached libmemcached redis gettext go')
     puts(green('安装virtualenvwrapper'))
     local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
+    puts(green('配置 .bash_profile'))
+    local('curl https://github.com/nypisces/Free/blob/master/bash_profile > ~/.bash_profile')
 
 
 @task
 def update():
     """更新工具包"""
-    puts(green('更新Homebrew'))
+    puts(green('更新 Homebrew'))
     local_proxy('brew update')
     local_proxy('brew upgrade')
     local('brew cleanup')
-    puts(green('更新gem'))
+    puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem update --system')
     local('sudo gem clean')
