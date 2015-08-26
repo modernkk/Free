@@ -38,7 +38,7 @@ def setup():
     puts(green('安装virtualenvwrapper'))
     local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
-    local('curl https://github.com/nypisces/Free/blob/master/bash_profile > ~/.bash_profile')
+    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
 
 
 @task
