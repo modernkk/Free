@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from fabric.colors import blue, cyan, green, magenta, red, yellow
 from fabric.context_managers import cd, hide, prefix, settings, path
 from fabric.contrib.files import exists
@@ -33,7 +35,8 @@ def setup():
     puts(green('安装'))
     local('sudo gem install cocoapods')
     puts(green('配置 Homebrew'))
-    local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+    if not os.path.exists('/usr/local/bin/brew'):
+        local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     local('brew install python3 bash-completion memcached libmemcached redis gettext go')
     puts(green('安装virtualenvwrapper'))
     local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
