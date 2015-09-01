@@ -37,7 +37,7 @@ def setup():
     puts(green('配置 Homebrew'))
     if not os.path.exists('/usr/local/bin/brew'):
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-    local('brew install python3 bash-completion memcached libmemcached redis gettext go')
+    local_proxy('brew install python3 bash-completion memcached libmemcached redis gettext go')
     puts(green('安装virtualenvwrapper'))
     local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
