@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
 from fabric.colors import blue, cyan, green, magenta, red, yellow
-from fabric.context_managers import cd, hide, prefix, settings, path
-from fabric.contrib.files import exists
-from fabric.decorators import task, roles, parallel
-from fabric.operations import local, run, sudo, put, get
-from fabric.state import env
-from fabric.tasks import execute
+from fabric.decorators import task
+from fabric.operations import local
 from fabric.utils import puts
 
 
@@ -64,3 +61,7 @@ def update_pip(pip='pip3', source=' -i http://mirrors.aliyun.com/pypi/simple/ --
 
 def local_proxy(command):
     local('proxychains4 {}'.format(command))
+
+
+def get_function_name():
+    return sys._getframe(1).f_code.co_name  # _getframe()则是自己的名字
