@@ -44,6 +44,8 @@ def setup():
 @task
 def update():
     """更新工具包"""
+    puts(green('更新 自己'))
+    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
     puts(green('更新 Homebrew'))
     local_proxy('brew update')
     local_proxy('brew upgrade')
