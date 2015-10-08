@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.2'
+env.version = '0.3'
 
 
 # ============
