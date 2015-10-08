@@ -29,20 +29,24 @@ def hello():
 @task
 def setup():
     """初始化工具包"""
+    puts(green('配置 Homebrew'))
+    if not os.path.exists('/usr/local/bin/brew'):
+        local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+    puts(green('配置 代理'))
+    local('brew install proxychains-ng')
+    local('sed -i "" "s/socks4 	127.0.0.1 9050/socks5 	127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.10/etc/proxychains.conf')
+    local_proxy('brew install ruby python3 bash-completion memcached libmemcached redis gettext go tree')
     puts(green('配置 RubyGems'))
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
     local('gem sources -l')
-    puts(green('安装'))
+    puts(green('安装 CocoaPods'))
     local('sudo gem install cocoapods')
-    puts(green('配置 Homebrew'))
-    if not os.path.exists('/usr/local/bin/brew'):
-        local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-    local_proxy('brew install python3 bash-completion memcached libmemcached redis gettext go')
-    puts(green('安装virtualenvwrapper'))
+    puts(green('安装 virtualenvwrapper'))
     local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
+    update()
 
 
 @task
