@@ -59,8 +59,8 @@ def update():
     local_proxy('brew upgrade')
     local('brew cleanup')
     puts(green('更新 RubyGems'))
-    local('sudo gem update')
     local('sudo gem update --system')
+    local('sudo gem update')
     local('sudo gem clean')
 
 
