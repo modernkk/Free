@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.3'
+env.version = '0.4'
 
 
 # ============
@@ -35,7 +35,7 @@ def setup():
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
     local('sed -i "" "s/socks4 	127.0.0.1 9050/socks5 	127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.10/etc/proxychains.conf')
-    local_proxy('brew install ruby python3 bash-completion memcached libmemcached redis gettext go tree')
+    local_proxy('brew install bash-completion go python3 ruby mysql memcached libmemcached redis gettext tree')
     puts(green('配置 RubyGems'))
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
