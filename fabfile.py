@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.4'
+env.version = '0.5'
 
 
 # ============
@@ -53,7 +53,7 @@ def setup():
 def update():
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
-    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
+    local('curl --compressed -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
     puts(green('更新 Homebrew'))
     local_proxy('brew update')
     local_proxy('brew upgrade')
