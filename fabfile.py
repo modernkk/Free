@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.5'
+env.version = '0.6'
 
 
 # ============
@@ -27,7 +27,7 @@ def hello():
 
 
 @task
-def setup():
+def setup(proxy=True):
     """初始化工具包"""
     puts(green('配置 Homebrew'))
     if not os.path.exists('/usr/local/bin/brew'):
@@ -35,7 +35,7 @@ def setup():
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
     local('sed -i "" "s/socks4 	127.0.0.1 9050/socks5 	127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.10/etc/proxychains.conf')
-    local_proxy('brew install bash-completion go python3 ruby mysql memcached libmemcached redis gettext tree')
+    local_proxy('brew install bash-completion go python3 ruby mysql memcached libmemcached redis gettext tree', proxy)
     puts(green('配置 RubyGems'))
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
@@ -50,13 +50,13 @@ def setup():
 
 
 @task
-def update():
+def update(proxy=True):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl --compressed -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
     puts(green('更新 Homebrew'))
-    local_proxy('brew update')
-    local_proxy('brew upgrade')
+    local_proxy('brew update', proxy)
+    local_proxy('brew upgrade', proxy)
     local('brew cleanup')
     puts(green('更新 RubyGems'))
     local('sudo gem update --system')
@@ -69,8 +69,8 @@ def update_pip(pip='pip3', source=' -i http://mirrors.aliyun.com/pypi/simple/ --
     local('{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.format(pip, source))
 
 
-def local_proxy(command):
-    local('proxychains4 {}'.format(command))
+def local_proxy(command, proxy):
+    local('{}{}'.format('proxychains4 ' if proxy else '', proxy))
 
 
 def get_function_name():
