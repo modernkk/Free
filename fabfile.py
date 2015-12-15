@@ -70,7 +70,7 @@ def update_pip(pip='pip3', source=' -i http://mirrors.aliyun.com/pypi/simple/ --
 
 
 def local_proxy(command, proxy):
-    local('{}{}'.format('proxychains4 ' if proxy else '', proxy))
+    local('{}{}'.format('proxychains4 ' if proxy else '', command))
 
 
 def get_function_name():
