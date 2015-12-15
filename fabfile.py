@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.6'
+env.version = '0.7'
 
 
 # ============
@@ -40,6 +40,8 @@ def setup(proxy=True):
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
     local('gem sources -l')
+    puts(green('安装 Alcatraz'))
+    local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
     puts(green('安装 CocoaPods'))
     local('sudo gem install cocoapods')
     puts(green('安装 virtualenvwrapper'))
