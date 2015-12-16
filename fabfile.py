@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8'
+env.version = '0.8.1'
 
 
 # ============
@@ -40,9 +40,9 @@ def setup(role='all', proxy=True):
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
     local('gem sources -l')
-    puts(green('安装 Alcatraz'))
-    local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
     if role.lower() in ['all', 'ios', 'osx']:
+        puts(green('安装 Alcatraz'))
+        local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
         puts(green('安装 CocoaPods'))
         local('sudo gem install cocoapods')
     if role.lower in ['all', 'django', 'py', 'python']:
@@ -58,7 +58,7 @@ def setup(role='all', proxy=True):
 def update(proxy=True):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
-    local('curl --compressed -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
+    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
     puts(green('更新 Homebrew'))
     local_proxy('brew update', proxy)
     local_proxy('brew upgrade', proxy)
