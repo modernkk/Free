@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.1'
+env.version = '0.8.2'
 
 
 # ============
@@ -45,7 +45,7 @@ def setup(role='all', proxy=True):
         local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
         puts(green('安装 CocoaPods'))
         local('sudo gem install cocoapods')
-    if role.lower in ['all', 'django', 'py', 'python']:
+    if role.lower() in ['all', 'django', 'py', 'python']:
         local_proxy('brew install go python3 mysql memcached libmemcached redis gettext', proxy)
         puts(green('安装 virtualenvwrapper'))
         local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
