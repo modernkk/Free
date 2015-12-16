@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.2'
+env.version = '0.8.3'
 
 
 # ============
@@ -51,7 +51,9 @@ def setup(role='all', proxy=True):
         local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
-    update()
+    puts(green('清理'))
+    local('brew cleanup')
+    local('sudo gem clean')
 
 
 @task
