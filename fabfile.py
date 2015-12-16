@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.3'
+env.version = '0.8.4'
 
 
 # ============
@@ -27,7 +27,7 @@ def hello():
 
 
 @task
-def setup(role='all', proxy=True):
+def setup(role='', proxy=True):
     """初始化工具包"""
     puts(green('配置 Homebrew'))
     if not os.path.exists('/usr/local/bin/brew'):
@@ -45,15 +45,14 @@ def setup(role='all', proxy=True):
         local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
         puts(green('安装 CocoaPods'))
         local('sudo gem install cocoapods')
+        local('sudo gem clean')
     if role.lower() in ['all', 'django', 'py', 'python']:
         local_proxy('brew install go python3 mysql memcached libmemcached redis gettext', proxy)
         puts(green('安装 virtualenvwrapper'))
         local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
-    puts(green('清理'))
     local('brew cleanup')
-    local('sudo gem clean')
 
 
 @task
