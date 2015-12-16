@@ -70,5 +70,6 @@ target/
 **/migrations/**
 !**/migrations/__init__.py
 /static/
+/tmp/
 /v1/
 dump.rdb
