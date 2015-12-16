@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.4'
+env.version = '0.8.5'
 
 
 # ============
@@ -29,8 +29,8 @@ def hello():
 @task
 def setup(role='', proxy=True):
     """初始化工具包"""
-    puts(green('配置 Homebrew'))
     if not os.path.exists('/usr/local/bin/brew'):
+        puts(green('安装 Homebrew'))
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
