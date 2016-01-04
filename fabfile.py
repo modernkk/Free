@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.5'
+env.version = '0.8.6'
 
 
 # ============
@@ -40,13 +40,17 @@ def setup(role='', proxy=True):
     local('gem sources --remove https://rubygems.org/')
     local('gem sources -a https://ruby.taobao.org/')
     local('gem sources -l')
+    if role.lower() in ['all', 'wiki']:
+        local_proxy('brew install icu4c', proxy)
+        local('sudo gem install gollum')
+        local('sudo gem clean')
     if role.lower() in ['all', 'ios', 'osx']:
         puts(green('安装 Alcatraz'))
         local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
         puts(green('安装 CocoaPods'))
         local('sudo gem install cocoapods')
         local('sudo gem clean')
-    if role.lower() in ['all', 'django', 'py', 'python']:
+    if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
         local_proxy('brew install go python3 mysql memcached libmemcached redis gettext', proxy)
         puts(green('安装 virtualenvwrapper'))
         local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
@@ -60,6 +64,8 @@ def update(proxy=True):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
+    puts(green('更新 bash_profile'))
+    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     puts(green('更新 Homebrew'))
     local_proxy('brew update', proxy)
     local_proxy('brew upgrade', proxy)
