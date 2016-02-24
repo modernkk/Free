@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.6'
+env.version = '0.8.7'
 
 
 # ============
@@ -34,7 +34,7 @@ def setup(role='', proxy=True):
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
-    local('sed -i "" "s/socks4 	127.0.0.1 9050/socks5 	127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.10/etc/proxychains.conf')
+    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
     local_proxy('brew install bash-completion ruby tree', proxy)
     puts(green('配置 RubyGems'))
     local('gem sources --remove https://rubygems.org/')
@@ -64,6 +64,7 @@ def update(proxy=True):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
+    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
     puts(green('更新 bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     puts(green('更新 Homebrew'))
