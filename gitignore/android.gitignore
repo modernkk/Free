@@ -35,6 +35,9 @@ captures/
 # Intellij
 *.iml
 
+# Keystore files
+*.jks
+
 # OSX
 .DS_Store
 

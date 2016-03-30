@@ -19,8 +19,7 @@ xcuserdata/
 
 ## Other
 *.moved-aside
-*.xccheckout
-*.xcscmblueprint
+*.xcuserstate
 
 ## Obj-C/Swift specific
 *.hmap
@@ -43,7 +42,9 @@ Carthage/Build
 
 # fastlane
 fastlane/report.xml
+fastlane/Preview.html
 fastlane/screenshots
+fastlane/test_output
 
 # OSX
 .DS_Store
