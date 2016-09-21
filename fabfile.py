@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.8'
+env.version = '0.8.9'
 
 
 # ============
@@ -46,7 +46,7 @@ def setup(role='', proxy=True):
         local('sudo gem clean')
     if role.lower() in ['all', 'ios', 'osx']:
         puts(green('安装 Alcatraz'))
-        local('curl -fsSL https://raw.github.com/alcatraz/Alcatraz/master/Scripts/install.sh | sh')
+        local('curl -fsSL https://raw.githubusercontent.com/supermarin/Alcatraz/deploy/Scripts/install.sh | sh')
         puts(green('安装 CocoaPods, shenzhen'))
         local('sudo gem install cocoapods shenzhen')
         local('sudo gem clean')
