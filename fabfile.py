@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.8.9'
+env.version = '0.9.0'
 
 
 # ============
@@ -18,12 +18,14 @@ env.version = '0.8.9'
 # ============
 @task(default=True, alias='别名测试')
 def hello():
-    puts('*' * 50)
-    puts(cyan('  Fabric 使用指南\n'))
-    puts(green('  查看所有命令: fab -l'))
-    puts(green('  查看命令: fab -d 命令'))
-    puts(yellow('  带参数命令请输入: fab 命令:参数'))
-    puts('*' * 50)
+    puts('*' * 60)
+    puts('*  'cyan('  Fabric 使用指南  '.center(58, '='))'  *')
+    puts('*' + ' ' * 58 + '*')
+    puts('*' + green('  查看所有命令: fab -l'.ljust(64)) + '*')
+    puts('*' + green('  查看命令: fab -d 命令'.ljust(64)) + '*')
+    puts('*' + yellow('  带参数命令请输入: fab 命令:参数'.ljust(70)) + '*')
+    puts('*' + ' ' * 58 + '*')
+    puts('*' * 60)
 
 
 @task
@@ -34,11 +36,10 @@ def setup(role='', proxy=True):
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
-    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
+    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
     local_proxy('brew install bash-completion ruby tree', proxy)
     puts(green('配置 RubyGems'))
-    local('gem sources --remove https://rubygems.org/')
-    local('gem sources -a https://ruby.taobao.org/')
+    local('gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/')
     local('gem sources -l')
     if role.lower() in ['all', 'wiki']:
         local_proxy('brew install icu4c', proxy)
@@ -66,7 +67,7 @@ def update(proxy=True):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
-    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1080/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
+    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
     puts(green('更新 bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     puts(green('更新 Homebrew'))
@@ -74,7 +75,6 @@ def update(proxy=True):
     local_proxy('brew upgrade', proxy)
     local('brew cleanup')
     puts(green('更新 RubyGems'))
-    local('sudo gem update --system')
     local('sudo gem update')
     local('sudo gem clean')
 
