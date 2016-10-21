@@ -19,7 +19,7 @@ env.version = '0.9.0'
 @task(default=True, alias='别名测试')
 def hello():
     puts('*' * 60)
-    puts('*  'cyan('  Fabric 使用指南  '.center(58, '='))'  *')
+    puts('*  ' + cyan('  Fabric 使用指南  '.center(58, '=')) + '  *')
     puts('*' + ' ' * 58 + '*')
     puts('*' + green('  查看所有命令: fab -l'.ljust(64)) + '*')
     puts('*' + green('  查看命令: fab -d 命令'.ljust(64)) + '*')
@@ -39,7 +39,7 @@ def setup(role='', proxy=True):
     local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
     local_proxy('brew install bash-completion ruby tree', proxy)
     puts(green('配置 RubyGems'))
-    local('gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/')
+    local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('gem sources -l')
     if role.lower() in ['all', 'wiki']:
         local_proxy('brew install icu4c', proxy)
