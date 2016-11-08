@@ -48,7 +48,7 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 
-# OSX
+# macOS
 .DS_Store
 
 # Byte-compiled / optimized / DLL files

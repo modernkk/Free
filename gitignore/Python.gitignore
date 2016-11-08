@@ -89,7 +89,7 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# OS X
+# macOS
 .DS_Store
 
 # Eclipse

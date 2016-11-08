@@ -43,12 +43,10 @@ captures/
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 
-# OSX
+# macOS
 .DS_Store
 
-# Butter Knife
-.apt_generated/
-
-# Eclipse project files
-.classpath
-.project
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
