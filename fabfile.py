@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.0'
+env.version = '0.9.1'
 
 
 # ============
@@ -37,24 +37,22 @@ def setup(role='', proxy=True):
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
     local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
-    local_proxy('brew install bash-completion ruby tree', proxy)
+    local('brew install bash-completion ruby tree')
     puts(green('配置 RubyGems'))
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('gem sources -l')
     if role.lower() in ['all', 'wiki']:
-        local_proxy('brew install icu4c', proxy)
+        local('brew install icu4c')
         local('sudo gem install gollum')
         local('sudo gem clean')
     if role.lower() in ['all', 'ios', 'osx']:
-        puts(green('安装 Alcatraz'))
-        local('curl -fsSL https://raw.githubusercontent.com/supermarin/Alcatraz/deploy/Scripts/install.sh | sh')
         puts(green('安装 CocoaPods, shenzhen'))
         local('sudo gem install cocoapods shenzhen')
         local('sudo gem clean')
-        puts(green('安装 SwiftLint'))
-        local_proxy('brew install swiftlint', proxy)
+        puts(green('安装 Carthage, SwiftLint'))
+        local('brew install carthage swiftlint')
     if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
-        local_proxy('brew install go python3 mysql memcached libmemcached redis gettext', proxy)
+        local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(green('安装 virtualenvwrapper'))
         local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
@@ -67,12 +65,10 @@ def update(proxy=True):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
-    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
     puts(green('更新 bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     puts(green('更新 Homebrew'))
-    local_proxy('brew update', proxy)
-    local_proxy('brew upgrade', proxy)
+    local('brew upgrade')
     local('brew cleanup')
     puts(green('更新 RubyGems'))
     local('sudo gem update')
