@@ -76,7 +76,7 @@ def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trus
     except:
         pass
     local('sudo -H pip2 install -U pip{}'.format(source))
-    local('sudo -H pip install -U Fabric{}'.format(source))
+    local('sudo -H pip install -U Fabric --ignore-installed six{}'.format(source))
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
