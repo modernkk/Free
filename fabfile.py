@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.1'
+env.version = '0.9.2'
 
 
 # ============
@@ -73,6 +73,12 @@ def update(proxy=True):
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
+    puts(green('更新 pip'))  # SO: https://github.com/Homebrew/legacy-homebrew/issues/25752
+    try:
+        local('sudo pip3 install -U pip -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
+    except:
+        pass
+    local('sudo pip2 install -U pip -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
 
 
 @task
