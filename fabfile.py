@@ -70,13 +70,13 @@ def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trus
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
-    puts(green('更新 pip, Fabric'))  # SO: https://github.com/Homebrew/legacy-homebrew/issues/25752
+    puts(green('更新 pip, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
     try:
         local('sudo -H pip3 install -U pip{}'.format(source))
     except:
         pass
     local('sudo -H pip2 install -U pip{}'.format(source))
-    local('sudo -H pip install -U Fabric --ignore-installed six{}'.format(source))
+    local('sudo -H pip install -U --user Fabric{}'.format(source))  # https://github.com/pypa/pip/issues/3165
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
