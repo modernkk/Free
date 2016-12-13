@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.2'
+env.version = '0.9.3'
 
 
 # ============
@@ -54,14 +54,14 @@ def setup(role='', proxy=True):
     if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(green('安装 virtualenvwrapper'))
-        local('sudo pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
+        local('sudo -H pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
     puts(green('配置 .bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     local('brew cleanup')
 
 
 @task
-def update(proxy=True):
+def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com'):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
@@ -70,15 +70,16 @@ def update(proxy=True):
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
+    puts(green('更新 pip, Fabric'))  # SO: https://github.com/Homebrew/legacy-homebrew/issues/25752
+    try:
+        local('sudo -H pip3 install -U pip{}'.format(source))
+    except:
+        pass
+    local('sudo -H pip2 install -U pip{}'.format(source))
+    local('sudo -H pip install -U Fabric{}'.format(source))
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
-    puts(green('更新 pip'))  # SO: https://github.com/Homebrew/legacy-homebrew/issues/25752
-    try:
-        local('sudo pip3 install -U pip -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
-    except:
-        pass
-    local('sudo pip2 install -U pip -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
 
 
 @task
