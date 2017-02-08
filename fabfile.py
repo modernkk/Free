@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.3'
+env.version = '0.9.4'
 
 
 # ============
@@ -36,8 +36,9 @@ def setup(role='', proxy=True):
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     puts(green('配置 代理'))
     local('brew install proxychains-ng')
-    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/Cellar/proxychains-ng/4.11/etc/proxychains.conf')
+    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/etc/proxychains.conf')
     local('brew install bash-completion ruby tree')
+    local('brew link --overwrite ruby')
     puts(green('配置 RubyGems'))
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('gem sources -l')
@@ -80,6 +81,7 @@ def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trus
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
+    puts(green('更新完毕\n如果更新了python3, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
 
 
 @task
