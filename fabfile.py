@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.4'
+env.version = '0.9.5'
 
 
 # ============
@@ -50,8 +50,8 @@ def setup(role='', proxy=True):
         puts(green('安装 CocoaPods, shenzhen'))
         local('sudo gem install cocoapods shenzhen')
         local('sudo gem clean')
-        puts(green('安装 Carthage, SwiftLint'))
-        local('brew install carthage swiftlint')
+        puts(green('安装 Carthage, SwiftFormat, SwiftLint'))
+        local('brew install carthage swiftformat swiftlint')
     if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(green('安装 virtualenvwrapper'))
