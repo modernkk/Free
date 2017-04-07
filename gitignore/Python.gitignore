@@ -76,11 +76,14 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
+# SageMath parsed files
+*.sage.py
+
 # dotenv
 .env
 
 # virtualenv
-.venv/
+.venv
 venv/
 ENV/
 
@@ -89,6 +92,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# mkdocs documentation
+/site
 
 # macOS
 .DS_Store

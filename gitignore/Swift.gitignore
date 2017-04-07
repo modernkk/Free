@@ -19,7 +19,8 @@ xcuserdata/
 
 ## Other
 *.moved-aside
-*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
 
 ## Obj-C/Swift specific
 *.hmap
@@ -33,6 +34,7 @@ playground.xcworkspace
 
 # Swift Package Manager
 Packages/
+Package.pins
 .build/
 
 # CocoaPods
