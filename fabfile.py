@@ -10,7 +10,8 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.5'
+env.version = '0.9.6'
+env.pypi_option = ' -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com'
 
 
 # ============
@@ -29,7 +30,7 @@ def hello():
 
 
 @task
-def setup(role='', proxy=True):
+def setup(role='', proxy=True, pypi_option=env.pypi_option):
     """初始化工具包"""
     if not os.path.exists('/usr/local/bin/brew'):
         puts(green('安装 Homebrew'))
@@ -54,15 +55,15 @@ def setup(role='', proxy=True):
         local('brew install carthage swiftformat swiftlint')
     if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
         local('brew install python3 mysql memcached libmemcached redis gettext')
-        puts(green('安装 virtualenvwrapper'))
-        local('sudo -H pip3 install virtualenvwrapper -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com')
+        puts(green('安装 pylint, virtualenvwrapper'))
+        local('sudo -H pip3 install pylint virtualenvwrapper{}'.format(pypi_option))
     puts(green('配置 .bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     local('brew cleanup')
 
 
 @task
-def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com'):
+def update(proxy=True, pypi_option=env.pypi_option):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
@@ -71,13 +72,13 @@ def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trus
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
-    puts(green('更新 pip, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
+    puts(green('更新 pip, pylint, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
     try:
-        local('sudo -H pip3 install -U pip{}'.format(source))
-    except:
+        local('sudo -H pip3 install -U pip pylint{}'.format(pypi_option))
+    except Exception:
         pass
-    local('sudo -H pip2 install -U pip{}'.format(source))
-    local('sudo -H pip install -U --user Fabric{}'.format(source))  # https://github.com/pypa/pip/issues/3165
+    local('sudo -H pip2 install -U pip{}'.format(pypi_option))
+    local('sudo -H pip install -U --user Fabric{}'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
@@ -85,8 +86,8 @@ def update(proxy=True, source=' -i http://mirrors.aliyun.com/pypi/simple/ --trus
 
 
 @task
-def update_pip(pip='pip3', source=' -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com'):
-    local('{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.format(pip, source))
+def update_pip(pip='pip3', pypi_option=env.pypi_option):
+    local('{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.format(pip, pypi_option))
 
 
 def local_proxy(command, proxy):
