@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.9.6'
+env.version = '0.10.0'
 env.pypi_option = ' -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com'
 
 
@@ -30,8 +30,10 @@ def hello():
 
 
 @task
-def setup(role='', proxy=True, pypi_option=env.pypi_option):
-    """初始化工具包"""
+def install(role=None, proxy=True, pypi_option=env.pypi_option):
+    """初始化工具包, 例如 fab install:ios"""
+    if not role:
+        role = raw_input('请输入角色(all, android, ios, macos, python, wiki): ')
     if not os.path.exists('/usr/local/bin/brew'):
         puts(green('安装 Homebrew'))
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
@@ -43,23 +45,37 @@ def setup(role='', proxy=True, pypi_option=env.pypi_option):
     puts(green('配置 RubyGems'))
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('gem sources -l')
+    puts(green('安装 BearyChat, GitHub Desktop, Google Chrome, ShadowsocksX-NG'))
+    local('brew cask install bearychat github-desktop google-chrome shadowsocksx-ng')
+    puts(green('安装 Atom, Charles, Dash'))
+    local('brew cask install atom charles dash')
     if role.lower() in ['all', 'wiki']:
+        puts(green('安装 gollum'))  # https://github.com/gollum/gollum/wiki/Installation
         local('brew install icu4c')
+        local('sudo gem install charlock_holmes -- --with-icu-dir=/usr/local/opt/icu4c')
         local('sudo gem install gollum')
-        local('sudo gem clean')
-    if role.lower() in ['all', 'ios', 'osx']:
-        puts(green('安装 CocoaPods, shenzhen'))
-        local('sudo gem install cocoapods shenzhen')
-        local('sudo gem clean')
+    if role.lower() in ['all', 'mobile', 'ios', 'macos']:
+        puts(green('安装 CocoaPods'))
+        local('sudo gem install cocoapods')
         puts(green('安装 Carthage, SwiftFormat, SwiftLint'))
         local('brew install carthage swiftformat swiftlint')
+    if role.lower() in ['all', 'mobile', 'android']:
+        puts(green('安装 Java, Android Studio'))
+        local('brew cask install java android-studio')
+    if role.lower() in ['all', 'mobile', 'android', 'ios', 'macos']:
+        puts(green('安装 fastlane'))
+        local('sudo gem install fastlane -NV')  # gem方式 官方文档有参数 -NV, brew方式被墙且无法更新
     if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
         local('brew install python3 mysql memcached libmemcached redis gettext')
-        puts(green('安装 pylint, virtualenvwrapper'))
-        local('sudo -H pip3 install pylint virtualenvwrapper{}'.format(pypi_option))
+        puts(green('安装 Pylint, Transifex Command-Line Tool, virtualenvwrapper'))
+        local('sudo -H pip3 install pylint transifex-client virtualenvwrapper{}'.format(pypi_option))
+        puts(green('安装 Java, Eclipse IDE for Java EE, MySQL Workbench'))
+        local('brew cask install java eclipse-jee mysqlworkbench')
+    local('brew cleanup')
+    local('brew cask cleanup')
+    local('sudo gem clean')
     puts(green('配置 .bash_profile'))
     local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
-    local('brew cleanup')
 
 
 @task
@@ -72,9 +88,9 @@ def update(proxy=True, pypi_option=env.pypi_option):
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
-    puts(green('更新 pip, pylint, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
+    puts(green('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
     try:
-        local('sudo -H pip3 install -U pip pylint{}'.format(pypi_option))
+        local('sudo -H pip3 install -U pip pylint transifex-client virtualenvwrapper{}'.format(pypi_option))
     except Exception:
         pass
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
