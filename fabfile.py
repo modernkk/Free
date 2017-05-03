@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.10.0'
+env.version = '0.10.1'
 env.pypi_option = ' -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com'
 
 
@@ -67,8 +67,8 @@ def install(role=None, proxy=True, pypi_option=env.pypi_option):
         local('sudo gem install fastlane -NV')  # gem方式 官方文档有参数 -NV, brew方式被墙且无法更新
     if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
         local('brew install python3 mysql memcached libmemcached redis gettext')
-        puts(green('安装 Pylint, Transifex Command-Line Tool, virtualenvwrapper'))
-        local('sudo -H pip3 install pylint transifex-client virtualenvwrapper{}'.format(pypi_option))
+        puts(green('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
+        local('sudo -H pip3 install pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
         puts(green('安装 Java, Eclipse IDE for Java EE, MySQL Workbench'))
         local('brew cask install java eclipse-jee mysqlworkbench')
     local('brew cleanup')
@@ -88,9 +88,9 @@ def update(proxy=True, pypi_option=env.pypi_option):
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
-    puts(green('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
+    puts(green('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
     try:
-        local('sudo -H pip3 install -U pip pylint transifex-client virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
     except Exception:
         pass
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
