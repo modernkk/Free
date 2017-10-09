@@ -79,10 +79,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Xcode
-## User settings
-xcuserdata/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
