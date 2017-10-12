@@ -14,7 +14,7 @@ opt_in_rules: # some rules are only opt-in
 included: # paths to include during linting. `--path` is ignored if present.
   - Source
   # NY
-  - MM/Classes
+  - */Classes # 修改为自己的代码路径
   - Pods/Taylor
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
