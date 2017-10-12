@@ -26,3 +26,6 @@ export PATH=$PATH:/usr/local/mysql/bin
 export WORKON_HOME=~/Envs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
+
+# Atom
+alias atom='/Applications/Atom.app/Contents/MacOS/Atom'
