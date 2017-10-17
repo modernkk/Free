@@ -54,7 +54,7 @@ coverage.xml
 *.log
 .static_storage/
 .media/
-local_settings.py
+# local_settings.py
 
 # Flask stuff:
 instance/
@@ -188,3 +188,4 @@ local.properties
 /static/
 /tmp/
 dump.rdb
+.idea/
