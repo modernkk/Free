@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.12'
+env.version = '0.13'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 
 
@@ -46,7 +46,7 @@ def install(role=None, proxy=True, pypi_option=env.pypi_option):
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('gem sources -l')
     puts(green('安装 BearyChat, GitHub Desktop, Google Chrome, ShadowsocksX-NG'))
-    local('brew cask install bearychat github-desktop google-chrome shadowsocksx-ng')
+    local('brew cask install bearychat github google-chrome shadowsocksx-ng')
     puts(green('安装 Atom, Charles, Dash'))
     local('brew cask install atom charles dash')
     if role.lower() in ['all', 'wiki']:
@@ -75,16 +75,16 @@ def install(role=None, proxy=True, pypi_option=env.pypi_option):
     local('brew cask cleanup')
     local('sudo gem clean')
     puts(green('配置 .bash_profile'))
-    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
+    curl('https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
 
 
 @task
 def update(proxy=True, pypi_option=env.pypi_option):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
-    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
+    curl('https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
     puts(green('更新 bash_profile'))
-    local('curl -fsSL https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
+    curl('https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
@@ -94,7 +94,7 @@ def update(proxy=True, pypi_option=env.pypi_option):
     except Exception:
         pass
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
-    local('sudo -H pip install -U --user Fabric{}'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
+    local('sudo -H pip install -U Fabric{}'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
     puts(green('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
@@ -104,6 +104,10 @@ def update(proxy=True, pypi_option=env.pypi_option):
 @task
 def update_pip(pip='pip3', pypi_option=env.pypi_option):
     local('{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.format(pip, pypi_option))
+
+
+def curl(command=''):
+    curl('-x 127.0.0.1:1087 {}'.format(command))
 
 
 def local_proxy(command, proxy):
