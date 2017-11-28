@@ -107,7 +107,7 @@ def update_pip(pip='pip3', pypi_option=env.pypi_option):
 
 
 def curl(command=''):
-    curl('-x 127.0.0.1:1087 {}'.format(command))
+    local('curl -fsSL -x 127.0.0.1:1087 {}'.format(command))
 
 
 def local_proxy(command, proxy):
