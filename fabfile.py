@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.13'
+env.version = '0.15'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 
 
@@ -30,16 +30,13 @@ def hello():
 
 
 @task
-def install(role=None, proxy=True, pypi_option=env.pypi_option):
+def install(role=None, pypi_option=env.pypi_option):
     """初始化工具包, 例如 fab install:ios"""
     if not role:
         role = raw_input('请输入角色(all, android, ios, macos, python, wiki): ')
     if not os.path.exists('/usr/local/bin/brew'):
         puts(green('安装 Homebrew'))
         local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-    puts(green('配置 代理'))
-    local('brew install proxychains-ng')
-    local('sed -i "" "s/socks4[[:space:]][[:space:]]127.0.0.1[[:space:]]9050/socks5  127.0.0.1 1086/g" /usr/local/etc/proxychains.conf')
     local('brew install bash-completion ruby tree')
     local('brew link --overwrite ruby')
     puts(green('配置 RubyGems'))
@@ -47,8 +44,8 @@ def install(role=None, proxy=True, pypi_option=env.pypi_option):
     local('gem sources -l')
     puts(green('安装 BearyChat, GitHub Desktop, Google Chrome, ShadowsocksX-NG'))
     local('brew cask install bearychat github google-chrome shadowsocksx-ng')
-    puts(green('安装 Atom, Charles, Dash'))
-    local('brew cask install atom charles dash')
+    puts(green('安装 Atom, Charles, Dash, Postman'))
+    local('brew cask install atom charles dash postman')
     if role.lower() in ['all', 'wiki']:
         puts(green('安装 gollum'))  # https://github.com/gollum/gollum/wiki/Installation
         local('brew install icu4c')
@@ -69,8 +66,8 @@ def install(role=None, proxy=True, pypi_option=env.pypi_option):
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(green('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
         local('sudo -H pip3 install pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
-        puts(green('安装 Java, Eclipse IDE for Java EE, MySQL Workbench'))
-        local('brew cask install java eclipse-jee mysqlworkbench')
+        puts(green('安装 Java, Eclipse IDE for Java Developers, MySQL Workbench'))
+        local('brew cask install java eclipse-java mysqlworkbench')
     local('brew cleanup')
     local('brew cask cleanup')
     local('sudo gem clean')
@@ -79,7 +76,7 @@ def install(role=None, proxy=True, pypi_option=env.pypi_option):
 
 
 @task
-def update(proxy=True, pypi_option=env.pypi_option):
+def update(pypi_option=env.pypi_option):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     curl('https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
@@ -108,10 +105,6 @@ def update_pip(pip='pip3', pypi_option=env.pypi_option):
 
 def curl(command=''):
     local('curl -fsSL -x 127.0.0.1:1087 {}'.format(command))
-
-
-def local_proxy(command, proxy):
-    local('{}{}'.format('proxychains4 ' if proxy else '', command))
 
 
 def get_function_name():
