@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.15'
+env.version = '0.16'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 
 
@@ -33,55 +33,58 @@ def hello():
 def install(role=None, pypi_option=env.pypi_option):
     """初始化工具包, 例如 fab install:ios"""
     if not role:
-        role = raw_input('请输入角色(all, android, ios, macos, python, wiki): ')
+        role = raw_input('请输入角色(all, android, ios, macos, django, wiki): ')
     if not os.path.exists('/usr/local/bin/brew'):
         puts(green('安装 Homebrew'))
-        local('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-    local('brew install bash-completion ruby tree')
-    local('brew link --overwrite ruby')
+        local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+    local('brew install bash-completion tree')
+    # local('brew link --overwrite ruby')
     puts(green('配置 RubyGems'))
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('gem sources -l')
-    puts(green('安装 BearyChat, GitHub Desktop, Google Chrome, ShadowsocksX-NG'))
-    local('brew cask install bearychat github google-chrome shadowsocksx-ng')
+    puts(green('安装 BearyChat, GitHub Desktop, Google Chrome'))
+    local('brew cask install bearychat github google-chrome')
     puts(green('安装 Atom, Charles, Dash, Postman'))
     local('brew cask install atom charles dash postman')
-    if role.lower() in ['all', 'wiki']:
+    if role.lower() in ['wiki']:
         puts(green('安装 gollum'))  # https://github.com/gollum/gollum/wiki/Installation
         local('brew install icu4c')
         local('sudo gem install charlock_holmes -- --with-icu-dir=/usr/local/opt/icu4c')
         local('sudo gem install gollum')
+    if role.lower() in ['all', 'android', 'django']:
+        puts(green('安装 Java'))
+        local('brew cask install java')
     if role.lower() in ['all', 'mobile', 'ios', 'macos']:
         puts(green('安装 CocoaPods'))
         local('sudo gem install cocoapods')
         puts(green('安装 Carthage, SwiftFormat, SwiftLint'))
         local('brew install carthage swiftformat swiftlint')
     if role.lower() in ['all', 'mobile', 'android']:
-        puts(green('安装 Java, Android Studio'))
-        local('brew cask install java android-studio')
+        puts(green('安装 Android Studio'))
+        local('brew cask install android-studio')
     if role.lower() in ['all', 'mobile', 'android', 'ios', 'macos']:
         puts(green('安装 fastlane'))
         local('sudo gem install fastlane -NV')  # gem方式 官方文档有参数 -NV, brew方式被墙且无法更新
-    if role.lower() in ['all', 'dj', 'django', 'py', 'python']:
+    if role.lower() in ['all', 'django']:
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(green('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
         local('sudo -H pip3 install pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
-        puts(green('安装 Java, Eclipse IDE for Java Developers, MySQL Workbench'))
-        local('brew cask install java eclipse-java mysqlworkbench')
+        puts(green('安装 MySQL Workbench'))
+        local('brew cask install mysqlworkbench')
     local('brew cleanup')
     local('brew cask cleanup')
     local('sudo gem clean')
     puts(green('配置 .bash_profile'))
-    curl('https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
+    curl('-o .bash_profile https://raw.githubusercontent.com/nypisces/Free/master/bash_profile')
 
 
 @task
 def update(pypi_option=env.pypi_option):
     """更新工具包"""
     puts(green('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
-    curl('https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py > ~/fabfile.py')
+    curl('-O https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py')
     puts(green('更新 bash_profile'))
-    curl('https://raw.githubusercontent.com/nypisces/Free/master/bash_profile > ~/.bash_profile')
+    curl('-o .bash_profile https://raw.githubusercontent.com/nypisces/Free/master/bash_profile')
     puts(green('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
