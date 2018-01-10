@@ -92,8 +92,9 @@ def update(pypi_option=env.pypi_option):
     local('brew upgrade')
     local('brew cleanup')
     if os.path.exists('/usr/local/bin/pip3'):
-        puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
+        puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
         local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
+    puts(cyan('更新 Fabric'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric{}'.format(pypi_option))
     puts(cyan('更新 RubyGems'))
