@@ -4,13 +4,14 @@ import os
 import sys
 
 from fabric.colors import blue, cyan, green, magenta, red, yellow
+from fabric.contrib.files import exists
 from fabric.decorators import task
 from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.16'
+env.version = '0.17'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 
 
@@ -89,10 +90,8 @@ def update(pypi_option=env.pypi_option):
     local('brew upgrade')
     local('brew cleanup')
     puts(green('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
-    try:
+    if exists('/usr/bin/pip3'):
         local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
-    except Exception:
-        pass
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric{}'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
     puts(green('更新 RubyGems'))
