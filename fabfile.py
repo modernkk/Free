@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.20'
+env.version = '0.21'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.proxy = '127.0.0.1:1087'
 
@@ -34,6 +34,8 @@ def install(role=None, pypi_option=env.pypi_option):
     """初始化工具包, 例如 fab install:ios"""
     if not role:
         role = raw_input('请输入角色(all, android, ios, macos, django, wiki): ')
+    puts(cyan('修正six, 以免以后执行 fab update 报错'))
+    local('sudo -H pip install -U Fabric{} --ignore-installed six'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
     if not os.path.exists('/usr/local/bin/brew'):
         puts(cyan('安装 Homebrew'))
         local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
@@ -89,11 +91,11 @@ def update(pypi_option=env.pypi_option):
     puts(cyan('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
-    if os.path.exists('/usr/bin/pip3'):
+    if os.path.exists('/usr/local/bin/pip3'):
         puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
         local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
-    local('sudo -H pip install -U Fabric{} --ignore-installed six'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
+    local('sudo -H pip install -U Fabric{}'.format(pypi_option))
     puts(cyan('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
