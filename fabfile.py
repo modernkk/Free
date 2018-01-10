@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.19'
+env.version = '0.20'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.proxy = '127.0.0.1:1087'
 
@@ -42,7 +42,6 @@ def install(role=None, pypi_option=env.pypi_option):
     # local('brew link --overwrite ruby')
     puts(cyan('配置 RubyGems'))
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
-    local('gem sources -l')
     puts(cyan('安装 BearyChat, GitHub Desktop, Google Chrome'))
     local('brew cask install bearychat github google-chrome')
     puts(cyan('安装 Atom, Charles, Dash, Postman'))
@@ -94,7 +93,7 @@ def update(pypi_option=env.pypi_option):
         puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine, Fabric'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
         local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
-    local('sudo -H pip install -U Fabric{}'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
+    local('sudo -H pip install -U Fabric{} --ignore-installed six'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
     puts(cyan('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
