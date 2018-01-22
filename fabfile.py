@@ -10,9 +10,10 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.22'
+env.version = '0.25'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.proxy = '127.0.0.1:1087'
+
 
 # ============
 # =  Hello   =
@@ -79,16 +80,16 @@ def install(role=None, pypi_option=env.pypi_option):
     local('brew cask cleanup')
     local('sudo gem clean')
     puts(cyan('配置 .bash_profile'))
-    curl('-o .bash_profile https://raw.githubusercontent.com/nypisces/Free/master/bash_profile')
+    curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile')
 
 
 @task
 def update(pypi_option=env.pypi_option):
     """更新工具包"""
     puts(cyan('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
-    curl('-O https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py')
+    curl('-O https://raw.githubusercontent.com/nyssance/Free/master/fabfile.py')
     puts(cyan('更新 bash_profile'))
-    curl('-o .bash_profile https://raw.githubusercontent.com/nypisces/Free/master/bash_profile')
+    curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile')
     puts(cyan('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
@@ -101,6 +102,7 @@ def update(pypi_option=env.pypi_option):
     puts(cyan('更新 RubyGems'))
     local('sudo gem update')
     local('sudo gem clean')
+    local('brew cask outdated')
     puts(cyan('更新完毕\n如果更新了python3, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
 
 
