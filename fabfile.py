@@ -73,7 +73,7 @@ def install(role=None, pypi_option=env.pypi_option):
         puts(cyan('安装 Python 3, MySQL, Memcached, libMemcached, Redis, gettext'))
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(cyan('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
-        local('sudo -H pip3 install pylint transifex-client==0.12.5 twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
         puts(cyan('安装 MySQL Workbench'))
         local('brew cask install mysqlworkbench')
     local('brew cleanup')
@@ -95,7 +95,7 @@ def update(pypi_option=env.pypi_option):
     local('brew cleanup')
     if os.path.exists('/usr/local/bin/pip3'):
         puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
-        local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install -U pip pylint transifex-client==0.12.5 twine virtualenvwrapper{}'.format(pypi_option))
     puts(cyan('更新 Fabric, requests'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric requests{}'.format(pypi_option))
