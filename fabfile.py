@@ -73,7 +73,7 @@ def install(role=None, pypi_option=env.pypi_option):
         puts(cyan('安装 Python 3, MySQL, Memcached, libMemcached, Redis, gettext'))
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(cyan('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
-        local('sudo -H pip3 install pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install pylint transifex-client==0.12.5 twine virtualenvwrapper{}'.format(pypi_option))
         puts(cyan('安装 MySQL Workbench'))
         local('brew cask install mysqlworkbench')
     local('brew cleanup')
