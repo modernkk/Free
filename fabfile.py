@@ -10,7 +10,7 @@ from fabric.state import env
 from fabric.utils import puts
 
 
-env.version = '0.25'
+env.version = '0.26'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.proxy = '127.0.0.1:1087'
 
@@ -43,9 +43,11 @@ def install(role=None, pypi_option=env.pypi_option):
         local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     puts(cyan('安装 bash-completion, Tree'))
     local('brew install bash-completion tree')
-    # local('brew link --overwrite ruby')
-    puts(cyan('配置 RubyGems'))
+    puts(cyan('安装Ruby, 配置 RubyGems'))
+    local('brew install ruby')  # 系统原版某些gem安装不上
+    local('brew link --overwrite ruby')
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
+    local('sudo gem update --system')
     puts(cyan('安装 BearyChat, GitHub Desktop, Google Chrome'))
     local('brew cask install bearychat github google-chrome')
     puts(cyan('安装 Atom, Charles, Dash, Postman'))
@@ -55,6 +57,9 @@ def install(role=None, pypi_option=env.pypi_option):
         local('brew install icu4c')
         local('sudo gem install charlock_holmes -- --with-icu-dir=/usr/local/opt/icu4c')
         local('sudo gem install gollum')
+    if role.lower() in ['jekyll']:
+        puts(cyan('安装 Jekyll, Bundler'))
+        local('sudo gem install jekyll bundler')  # https://jekyllrb.com
     if role.lower() in ['all', 'android', 'django']:
         puts(cyan('安装 Java'))
         local('brew cask install java')
@@ -100,6 +105,7 @@ def update(pypi_option=env.pypi_option):
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric requests{}'.format(pypi_option))
     puts(cyan('更新 RubyGems'))
+    local('sudo gem update --system')
     local('sudo gem update')
     local('sudo gem clean')
     local('brew cask outdated')
