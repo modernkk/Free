@@ -76,8 +76,8 @@ def install(role=None, pypi_option=env.pypi_option):
     if role.lower() in ['all', 'django']:
         puts(cyan('安装 Python 3, MySQL, Memcached, libMemcached, Redis, gettext'))
         local('brew install python3 mysql memcached libmemcached redis gettext')
-        puts(cyan('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
-        local('sudo -H pip3 install pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
+        puts(cyan('安装 Pylint, Flake8, YAPF, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
+        local('sudo -H pip3 install pylint flake8 yapf transifex-client twine virtualenvwrapper{}'.format(pypi_option))
         puts(cyan('安装 MySQL Workbench'))
         local('brew cask install mysqlworkbench')
     local('brew cleanup')
