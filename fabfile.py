@@ -9,10 +9,9 @@ from fabric.state import env
 from fabric.utils import puts
 
 env.version = '0.28'
-env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.colorize_errors = True
-env.output_prefix = False
 env.proxy = '127.0.0.1:1087'
+env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 
 
 # ============
