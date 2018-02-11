@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 
 from fabric.colors import blue, cyan, green, magenta, red, yellow
 from fabric.decorators import task
@@ -11,6 +10,8 @@ from fabric.utils import puts
 
 env.version = '0.28'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
+env.colorize_errors = True
+env.output_prefix = False
 env.proxy = '127.0.0.1:1087'
 
 
@@ -121,7 +122,3 @@ def update_pip(pip='pip3', pypi_option=env.pypi_option):
 
 def curl(command=''):
     local('curl -fsSL{} {}'.format(' -x {}'.format(env.proxy) if env.proxy else '', command))
-
-
-def get_function_name():
-    return sys._getframe(1).f_code.co_name  # _getframe()则是自己的名字
