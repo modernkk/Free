@@ -9,8 +9,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-
-env.version = '0.26'
+env.version = '0.27'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.proxy = '127.0.0.1:1087'
 
@@ -48,10 +47,10 @@ def install(role=None, pypi_option=env.pypi_option):
     local('brew link --overwrite ruby')
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
     local('sudo gem update --system')
-    puts(cyan('安装 BearyChat, GitHub Desktop, Google Chrome'))
-    local('brew cask install bearychat github google-chrome')
-    puts(cyan('安装 Atom, Charles, Dash, Postman'))
-    local('brew cask install atom charles dash postman')
+    puts(cyan('安装 GitHub Desktop, Google Chrome, Visual Studio Code'))
+    local('brew cask install github google-chrome, visual-studio-code')
+    puts(cyan('安装 BearyChat, Charles, Dash, Postman'))
+    local('brew cask install bearychat charles dash postman')
     if role.lower() in ['wiki']:
         puts(cyan('安装 gollum'))  # https://github.com/gollum/gollum/wiki/Installation
         local('brew install icu4c')
@@ -74,7 +73,7 @@ def install(role=None, pypi_option=env.pypi_option):
     if role.lower() in ['all', 'mobile', 'android', 'ios', 'macos']:
         puts(cyan('安装 fastlane'))
         local('sudo gem install fastlane -NV')  # gem方式 官方文档有参数 -NV, brew方式被墙且无法更新
-    if role.lower() in ['all', 'django']:        
+    if role.lower() in ['all', 'django']:
         puts(cyan('安装 Python 3, MySQL, Memcached, libMemcached, Redis, gettext'))
         local('brew install python3 mysql memcached libmemcached redis gettext')
         puts(cyan('安装 Pylint, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
@@ -100,7 +99,7 @@ def update(pypi_option=env.pypi_option):
     local('brew cleanup')
     if os.path.exists('/usr/local/bin/pip3'):
         puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
-        local('sudo -H pip3 install -U pip pylint transifex-client==0.12.5 twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
     puts(cyan('更新 Fabric, requests'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric requests{}'.format(pypi_option))
