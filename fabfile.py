@@ -9,7 +9,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.27'
+env.version = '0.28'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.proxy = '127.0.0.1:1087'
 
@@ -23,8 +23,9 @@ def hello():
     puts('*  ' + cyan('  Fabric 使用指南  '.center(58, '=')) + '  *')
     puts('*' + ' ' * 58 + '*')
     puts('*' + green('  查看所有命令: fab -l'.ljust(64)) + '*')
-    puts('*' + green('  查看命令: fab -d 命令'.ljust(64)) + '*')
-    puts('*' + yellow('  带参数命令请输入: fab 命令:参数'.ljust(70)) + '*')
+    puts('*' + green('      查看命令: fab -d 命令'.ljust(64)) + '*')
+    puts('*' + magenta('    带参数命令: fab 命令:参数'.ljust(67)) + '*')
+    puts('*' + blue('  info') + red(' error ') + yellow('warning') + ' ' * 38 + '*')
     puts('*' + ' ' * 58 + '*')
     puts('*' * 60)
 
@@ -34,9 +35,9 @@ def install(role=None, pypi_option=env.pypi_option):
     """初始化工具包, 例如 fab install:ios"""
     if not role:
         role = raw_input('请输入角色(all, android, ios, macos, django, wiki): ')
-    puts(cyan('安装requests, 修正six, 以免以后执行 fab update 报错'))
+    puts(cyan('安装requests, 修正six, 以免以后执行 fab update 报错'))  # https://github.com/pypa/pip/issues/3165
     local('sudo -H pip install requests{}'.format(pypi_option))
-    local('sudo -H pip install -U Fabric{} --ignore-installed six'.format(pypi_option))  # https://github.com/pypa/pip/issues/3165
+    local('sudo -H pip install -U Fabric{} --ignore-installed six'.format(pypi_option))
     if not os.path.exists('/usr/local/bin/brew'):
         puts(cyan('安装 Homebrew'))
         local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
@@ -98,7 +99,7 @@ def update(pypi_option=env.pypi_option):
     local('brew upgrade')
     local('brew cleanup')
     if os.path.exists('/usr/local/bin/pip3'):
-        puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine'))  # https://github.com/Homebrew/legacy-homebrew/issues/25752
+        puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine'))
         local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
     puts(cyan('更新 Fabric, requests'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
@@ -113,7 +114,9 @@ def update(pypi_option=env.pypi_option):
 
 @task
 def update_pip(pip='pip3', pypi_option=env.pypi_option):
-    local('{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.format(pip, pypi_option))
+    local(
+        '{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.
+        format(pip, pypi_option))
 
 
 def curl(command=''):
