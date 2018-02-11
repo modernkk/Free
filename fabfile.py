@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.28'
+env.version = '0.29'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -34,8 +34,8 @@ def hello():
 def install(role=None, pypi_option=env.pypi_option):
     """初始化工具包, 例如 fab install:ios"""
     if not role:
-        role = raw_input('请输入角色(all, android, ios, macos, django, wiki): ')
-    puts(cyan('安装requests, 修正six, 以免以后执行 fab update 报错'))  # https://github.com/pypa/pip/issues/3165
+        role = raw_input('请输入角色 [all, android, ios, macos, python, django, wiki, jekyll]: ')
+    puts(cyan('安装 requests, 修正 six, 以免以后执行 fab update 报错'))  # https://github.com/pypa/pip/issues/3165
     local('sudo -H pip install requests{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric{} --ignore-installed six'.format(pypi_option))
     if not os.path.exists('/usr/local/bin/brew'):
@@ -43,7 +43,7 @@ def install(role=None, pypi_option=env.pypi_option):
         local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
     puts(cyan('安装 bash-completion, Tree'))
     local('brew install bash-completion tree')
-    puts(cyan('安装Ruby, 配置 RubyGems'))
+    puts(cyan('安装 Ruby, 配置 RubyGems'))
     local('brew install ruby')  # 系统原版某些gem安装不上
     local('brew link --overwrite ruby')
     local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
@@ -74,11 +74,16 @@ def install(role=None, pypi_option=env.pypi_option):
     if role.lower() in ['all', 'mobile', 'android', 'ios', 'macos']:
         puts(cyan('安装 fastlane'))
         local('sudo gem install fastlane -NV')  # gem方式 官方文档有参数 -NV, brew方式被墙且无法更新
+    if role.lower() in ['all', 'python', 'django']:
+        puts(cyan('安装 Python 3'))
+        local('brew install python3')
+        puts(cyan('安装 Pylint, Flake8, YAPF, twine, virtualenvwrapper'))  # 上传到pypi需要twine
+        local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
     if role.lower() in ['all', 'django']:
-        puts(cyan('安装 Python 3, MySQL, Memcached, libMemcached, Redis, gettext'))
-        local('brew install python3 mysql memcached libmemcached redis gettext')
-        puts(cyan('安装 Pylint, Flake8, YAPF, Transifex Command-Line Tool, twine, virtualenvwrapper'))  # 上传到pypi需要twine
-        local('sudo -H pip3 install pylint flake8 yapf transifex-client twine virtualenvwrapper{}'.format(pypi_option))
+        puts(cyan('安装 MySQL, Memcached, libMemcached, Redis, gettext'))
+        local('brew install mysql memcached libmemcached redis gettext')
+        puts(cyan('安装 Transifex Command-Line Tool'))
+        local('sudo -H pip3 install transifex-client{}'.format(pypi_option))
         puts(cyan('安装 MySQL Workbench'))
         local('brew cask install mysqlworkbench')
     local('brew cleanup')
@@ -99,8 +104,10 @@ def update(pypi_option=env.pypi_option):
     local('brew upgrade')
     local('brew cleanup')
     if os.path.exists('/usr/local/bin/pip3'):
-        puts(cyan('更新 pip, Pylint, Transifex Command-Line Tool, virtualenvwrapper, twine'))
-        local('sudo -H pip3 install -U pip pylint transifex-client twine virtualenvwrapper{}'.format(pypi_option))
+        puts(cyan('更新 pip, Pylint, Flake8, YAPF, twine, virtualenvwrapper'))
+        local('sudo -H pip3 install -U pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
+        puts(cyan('更新 Transifex Command-Line Tool'))
+        local('sudo -H pip3 install -U transifex-client{}'.format(pypi_option))
     puts(cyan('更新 Fabric, requests'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip install -U Fabric requests{}'.format(pypi_option))
