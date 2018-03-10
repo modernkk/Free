@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.30'
+env.version = '0.31'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -112,7 +112,7 @@ def update(pypi_option=env.pypi_option):
         local('sudo -H pip3 install -U transifex-client{}'.format(pypi_option))
     puts(cyan('更新 Fabric, requests'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
-    local('sudo -H pip install -U Fabric requests{}'.format(pypi_option))
+    local('sudo -H pip2 install -U Fabric requests{}'.format(pypi_option))
     puts(cyan('更新 RubyGems'))
     local('sudo gem update --system')
     local('sudo gem update')
