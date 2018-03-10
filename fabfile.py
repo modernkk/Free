@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.29'
+env.version = '0.30'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -75,10 +75,12 @@ def install(role=None, pypi_option=env.pypi_option):
         puts(cyan('安装 fastlane'))
         local('sudo gem install fastlane -NV')  # gem方式 官方文档有参数 -NV, brew方式被墙且无法更新
     if role.lower() in ['all', 'python', 'django']:
-        puts(cyan('安装 Python 3'))
-        local('brew install python3')
+        puts(cyan('安装 Python'))
+        local('brew install python')
         puts(cyan('安装 Pylint, Flake8, YAPF, twine, virtualenvwrapper'))  # 上传到pypi需要twine
         local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
+        puts(cyan('安装 PyCharm'))
+        local('brew cask install pycharm')
     if role.lower() in ['all', 'django']:
         puts(cyan('安装 MySQL, Memcached, libMemcached, Redis, gettext'))
         local('brew install mysql memcached libmemcached redis gettext')
@@ -116,7 +118,7 @@ def update(pypi_option=env.pypi_option):
     local('sudo gem update')
     local('sudo gem clean')
     local('brew cask outdated')
-    puts(cyan('更新完毕\n如果更新了python3, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
+    puts(cyan('更新完毕\n如果更新了python, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
 
 
 @task
