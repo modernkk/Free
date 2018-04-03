@@ -1,4 +1,4 @@
-# Xcode
+# __Xcode__
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
@@ -52,7 +52,7 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-# macOS
+# __macOS__
 # General
 .DS_Store
 .AppleDouble
@@ -80,7 +80,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
+# __Fabric__
 *.py[cod]
-*$py.class

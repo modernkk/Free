@@ -1,3 +1,4 @@
+# __Python__
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -53,9 +54,8 @@ coverage.xml
 
 # Django stuff:
 *.log
-.static_storage/
-.media/
 local_settings.py
+db.sqlite3
 
 # Flask stuff:
 instance/
@@ -104,7 +104,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# macOS
+# __macOS__
 # General
 .DS_Store
 .AppleDouble
@@ -132,10 +132,15 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Development
+# __PyCharm__
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+
+# __Development__
 **/migrations/**
 !**/migrations/__init__.py
 /static/
 /tmp/
 dump.rdb
-.idea/

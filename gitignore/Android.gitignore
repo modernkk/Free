@@ -1,3 +1,4 @@
+# __Android__
 # Built application files
 *.apk
 *.ap_
@@ -39,6 +40,7 @@ captures/
 .idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
+.idea/caches
 
 # Keystore files
 *.jks
@@ -61,7 +63,7 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-# macOS
+# __macOS__
 # General
 .DS_Store
 .AppleDouble
@@ -89,7 +91,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
+# __Fabric__
 *.py[cod]
-*$py.class
