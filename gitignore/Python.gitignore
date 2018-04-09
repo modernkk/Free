@@ -144,3 +144,5 @@ Temporary Items
 /static/
 /tmp/
 dump.rdb
+/node_modules/
+package-lock.json
