@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.50'
+env.version = '0.60'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -116,7 +116,7 @@ def update(pypi_option=env.pypi_option):
         local('sudo -H pip3 install -U pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
         puts(cyan('更新 Transifex Command-Line Tool'))
         local('sudo -H pip3 install -U transifex-client{}'.format(pypi_option))
-    puts(cyan('更新 Fabric, isort, requests'))
+    puts(cyan('更新 pip2, Fabric, isort, requests'))
     local('sudo -H pip2 install -U pip{}'.format(pypi_option))
     local('sudo -H pip2 install -U Fabric isort requests{}'.format(pypi_option))
     puts(cyan('更新 RubyGems'))
@@ -125,13 +125,6 @@ def update(pypi_option=env.pypi_option):
     local('sudo gem clean')
     local('brew cask outdated')
     puts(cyan('更新完毕\n如果更新了python, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
-
-
-@task
-def update_pip(pip='pip3', pypi_option=env.pypi_option):
-    local(
-        '{0} freeze --local | cut -d = -f 1 | grep -v "^\(bonjour\|pyOpenSSL\|pyobjc-framework-Message\|pyobjc-framework-ServerNotification\|xattr\)" | sudo xargs {0} install -U{1}'.
-        format(pip, pypi_option))
 
 
 def curl(command=''):
