@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.62'
+env.version = '0.63'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -36,7 +36,7 @@ def install(role=None, pypi_option=env.pypi_option):
     if not role:
         role = raw_input('请输入角色 [all, android, ios, macos, node, python, django, wiki, jekyll]: ')
     puts(green('安装 Fabric ( 修正 six, 以免以后执行 fab update 报错 ), isort, requests'))  # https://github.com/pypa/pip/issues/3165
-    local('sudo -H pip2 install -U Fabric{} --ignore-installed six'.format(pypi_option))
+    local('sudo -H pip2 install -U Fabric==1.14{} --ignore-installed six'.format(pypi_option))
     local('sudo -H pip2 install isort requests{}'.format(pypi_option))
     if not os.path.exists('/usr/local/bin/brew'):
         puts(green('安装 Homebrew'))
