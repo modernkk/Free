@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.64'
+env.version = '0.6.5'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -113,12 +113,12 @@ def update(pypi_option=env.pypi_option):
         local('npm update -g')
     if os.path.exists('/usr/local/bin/pip3'):
         puts(cyan('更新 pip, Pylint, Flake8, YAPF, twine, virtualenvwrapper'))
-        local('sudo -H pip3 install -U pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
         puts(cyan('更新 Transifex Command-Line Tool'))
-        local('sudo -H pip3 install -U transifex-client{}'.format(pypi_option))
+        local('sudo -H pip3 install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_option))
     puts(cyan('更新 Fabric, isort, requests'))
     # local('sudo -H pip2 install -U pip{}'.format(pypi_option))  # 更新pip2会引起pip3失效
-    local('sudo -H pip2 install -U Fabric==1.14 isort requests{}'.format(pypi_option))
+    local('sudo -H pip2 install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_option))
     puts(cyan('更新 RubyGems'))
     local('sudo gem update --system')
     local('sudo gem update')
