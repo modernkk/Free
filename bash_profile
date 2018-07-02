@@ -19,6 +19,9 @@ if [ -f /usr/local/etc/profile.d/bash_completion.sh ]; then
     complete -o nospace -F _fab_complete fab
 fi
 
+# Homebrew
+export PATH="/usr/local/sbin:$PATH"
+
 # MySQL
 export PATH=$PATH:/usr/local/mysql/bin
 

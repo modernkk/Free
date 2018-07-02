@@ -108,6 +108,9 @@ def update(pypi_option=env.pypi_option):
     puts(cyan('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
+    puts(cyan('检查 Homebrew 状态'))
+    local('brew services list')
+    local('brew doctor')
     if os.path.exists('/usr/local/bin/node'):
         puts(cyan('更新 npm'))
         local('npm update -g')
