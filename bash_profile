@@ -22,9 +22,6 @@ fi
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
 
-# MySQL
-export PATH=$PATH:/usr/local/mysql/bin
-
 # virtualenvwrapper
 export WORKON_HOME=~/Envs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3

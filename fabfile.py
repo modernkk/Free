@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.6.5'
+env.version = '0.6.7'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -77,16 +77,16 @@ def install(role=None, pypi_option=env.pypi_option):
     if role.lower() in ['all', 'node']:
         puts(green('安装 Node.js'))
         local('brew install node')
-        puts(green('全局安装 BrowserSync, gulp, JS Beautifier'))
-        local('npm install -g browser-sync gulp-cli gulp js-beautify')
+        puts(green('全局安装 BrowserSync, gulp'))
+        local('npm install -g browser-sync gulp-cli gulp')
     if role.lower() in ['all', 'python', 'django']:
         puts(green('安装 Python'))
         local('brew install python')
         puts(green('安装 Pylint, Flake8, YAPF, twine, virtualenvwrapper'))  # 上传到pypi需要twine
         local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
     if role.lower() in ['all', 'django']:
-        puts(green('安装 MySQL, Memcached, libMemcached, Redis, gettext'))
-        local('brew install mysql memcached libmemcached redis gettext')
+        puts(green('安装 MySQL, Redis, gettext'))
+        local('brew install mysql redis gettext')
         puts(green('安装 Transifex Command-Line Tool'))
         local('sudo -H pip3 install transifex-client{}'.format(pypi_option))
         puts(green('安装 Docker, MySQL Workbench'))
