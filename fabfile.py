@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 
 import os
 
@@ -8,11 +8,11 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.6.7'
+env.version = '0.6.8'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
-env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
-
+# env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
+env.pypi_mirror = ' -i https://pypi.douban.com/simple/ '
 
 # ============
 # =  Hello   =
