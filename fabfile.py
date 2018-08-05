@@ -11,12 +11,12 @@ from fabric.utils import puts
 env.version = '0.6.8'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
-# env.pypi_option = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
+# env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
 env.pypi_mirror = ' -i https://pypi.douban.com/simple/ '
 
-# ============
-# =  Hello   =
-# ============
+#########
+# Hello #
+#########
 @task(default=True, alias='别名测试')
 def hello():
     puts('*' * 60)
@@ -31,13 +31,13 @@ def hello():
 
 
 @task
-def install(role=None, pypi_option=env.pypi_option):
+def install(role=None, pypi_mirror=env.pypi_mirror):
     """初始化工具包, 例如 fab install:ios"""
     if not role:
         role = raw_input('请输入角色 [all, android, ios, macos, node, python, django, wiki, jekyll]: ')
     puts(green('安装 Fabric ( 修正 six, 以免以后执行 fab update 报错 ), isort, requests'))  # https://github.com/pypa/pip/issues/3165
-    local('sudo -H pip2 install -U Fabric==1.14{} --ignore-installed six'.format(pypi_option))
-    local('sudo -H pip2 install isort requests{}'.format(pypi_option))
+    local('sudo -H pip2 install -U Fabric==1.14{} --ignore-installed six'.format(pypi_mirror))
+    local('sudo -H pip2 install isort requests{}'.format(pypi_mirror))
     if not os.path.exists('/usr/local/bin/brew'):
         puts(green('安装 Homebrew'))
         local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
@@ -83,12 +83,12 @@ def install(role=None, pypi_option=env.pypi_option):
         puts(green('安装 Python'))
         local('brew install python')
         puts(green('安装 Pylint, Flake8, YAPF, twine, virtualenvwrapper'))  # 上传到pypi需要twine
-        local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
     if role.lower() in ['all', 'django']:
         puts(green('安装 MySQL, Redis, gettext'))
         local('brew install mysql redis gettext')
         puts(green('安装 Transifex Command-Line Tool'))
-        local('sudo -H pip3 install transifex-client{}'.format(pypi_option))
+        local('sudo -H pip3 install transifex-client{}'.format(pypi_mirror))
         puts(green('安装 Docker, MySQL Workbench'))
         local('brew cask install docker mysqlworkbench')
     local('brew cleanup')
@@ -99,7 +99,7 @@ def install(role=None, pypi_option=env.pypi_option):
 
 
 @task
-def update(pypi_option=env.pypi_option):
+def update(pypi_mirror=env.pypi_mirror):
     """更新工具包"""
     puts(cyan('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
     curl('-O https://raw.githubusercontent.com/nyssance/Free/master/fabfile.py')
@@ -116,12 +116,12 @@ def update(pypi_option=env.pypi_option):
         local('npm update -g')
     if os.path.exists('/usr/local/bin/pip3'):
         puts(cyan('更新 pip, Pylint, Flake8, YAPF, twine, virtualenvwrapper'))
-        local('sudo -H pip3 install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_option))
+        local('sudo -H pip3 install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
         puts(cyan('更新 Transifex Command-Line Tool'))
-        local('sudo -H pip3 install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_option))
+        local('sudo -H pip3 install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_mirror))
     puts(cyan('更新 Fabric, isort, requests'))
-    # local('sudo -H pip2 install -U pip{}'.format(pypi_option))  # 更新pip2会引起pip3失效
-    local('sudo -H pip2 install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_option))
+    # local('sudo -H pip2 install -U pip{}'.format(pypi_mirror))  # 更新pip2会引起pip3失效
+    local('sudo -H pip2 install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_mirror))
     puts(cyan('更新 RubyGems'))
     local('sudo gem update --system')
     local('sudo gem update')
