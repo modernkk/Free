@@ -8,11 +8,11 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.6.8'
+env.version = '0.6.9'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 # env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
-env.pypi_mirror = ' -i https://pypi.douban.com/simple/ '
+env.pypi_mirror = ' -i https://pypi.douban.com/simple/'
 
 #########
 # Hello #
@@ -46,7 +46,7 @@ def install(role=None, pypi_mirror=env.pypi_mirror):
     puts(green('安装 Ruby, 配置 RubyGems'))
     local('brew install ruby')  # 系统原版某些gem安装不上
     local('brew link --overwrite ruby')
-    local('gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/')
+    local('gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/')
     local('sudo gem update --system')
     puts(green('安装 GitHub Desktop, Google Chrome, Visual Studio Code'))
     local('brew cask install github google-chrome visual-studio-code')
@@ -123,6 +123,7 @@ def update(pypi_mirror=env.pypi_mirror):
     # local('sudo -H pip2 install -U pip{}'.format(pypi_mirror))  # 更新pip2会引起pip3失效
     local('sudo -H pip2 install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_mirror))
     puts(cyan('更新 RubyGems'))
+    local('gem sources')
     local('sudo gem update --system')
     local('sudo gem update')
     local('sudo gem clean')
