@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.6.9'
+env.version = '0.7.0'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 # env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -58,8 +58,8 @@ def install(role=None, pypi_mirror=env.pypi_mirror):
         local('sudo gem install charlock_holmes -- --with-icu-dir=/usr/local/opt/icu4c')
         local('sudo gem install gollum')
     if role.lower() in ['jekyll']:
-        puts(green('安装 Jekyll, Bundler'))
-        local('sudo gem install jekyll bundler')  # https://jekyllrb.com
+        puts(green('安装 Jekyll - 附带安装 Bundler'))
+        local('sudo gem install bundler jekyll')  # https://jekyllrb.com
     if role.lower() in ['all', 'android', 'django']:
         puts(green('安装 Java'))
         local('brew cask install java')
