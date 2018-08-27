@@ -105,5 +105,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# R.swift
+*.generated.swift
+
 # __Fabric__
 *.py[cod]
