@@ -70,7 +70,7 @@ opt_in_rules: # some rules are only opt-in
 file_header:
   required_pattern: |
                     \/\/
-                    \/\/  Copyright © \d{4} NY \(nyssance@icloud.com\)\. All rights reserved\.
+                    \/\/  Copyright © \d{4} NY \<nyssance@icloud.com\>\. All rights reserved\.
                     \/\/
 file_length:
   warning: 200

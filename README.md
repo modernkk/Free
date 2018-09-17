@@ -1,6 +1,20 @@
 # Free
 井井兮其有理也
 
+### Install
+Install Fabric
+```bash
+sudo easy_install -U pip
+sudo -H pip install Fabric -i https://pypi.douban.com/simple/
+```
+
+Download fabfile.py and run install
+```bash
+cd ~
+curl -fsSL -O https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py
+fab install:[python, ios, android]
+```
+
 ### Vendor
 - [Fabric](http://www.fabfile.org)
 - [Homebrew](https://brew.sh/)
