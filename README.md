@@ -5,7 +5,7 @@
 Install Fabric
 ```bash
 sudo easy_install -U pip
-sudo -H pip install Fabric -i https://pypi.douban.com/simple/
+sudo -H pip install Fabric==1.14 -i https://pypi.douban.com/simple/
 ```
 
 Download fabfile.py and run install
