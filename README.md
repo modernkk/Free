@@ -2,7 +2,7 @@
 井井兮其有理也
 
 ### Install
-Install Fabric
+Install Fabric
 ```bash
 sudo easy_install -U pip
 sudo -H pip install Fabric -i https://pypi.douban.com/simple/
