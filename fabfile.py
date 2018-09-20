@@ -33,8 +33,11 @@ def hello():
 @task
 def install(role=None, pypi_mirror=env.pypi_mirror):
     """初始化工具包, 例如 fab install:ios"""
-    if not role:
-        role = raw_input('请输入角色 [all, android, ios, macos, node, python, django, wiki, jekyll]: ')
+    role = raw_input('请输入角色 [all, android, ios, macos, node, python, django, wiki, jekyll]: ')
+    confirm = raw_input('是否使用 brew cask 安装 常用软件 (速度较慢) ? [y/N]: ')
+    is_cask = confirm.lower() in ['ok', 'y', 'yes']
+    confirm = raw_input('是否使用本地代理 {}? [y/N]: '.format(env.proxy))
+    is_proxy = confirm.lower() in ['ok', 'y', 'yes']
     puts(green('安装 Fabric ( 修正 six, 以免以后执行 fab update 报错 ), isort, requests'))  # https://github.com/pypa/pip/issues/3165
     local('sudo -H pip2 install -U Fabric==1.14{} --ignore-installed six'.format(pypi_mirror))
     local('sudo -H pip2 install isort requests{}'.format(pypi_mirror))
@@ -48,10 +51,12 @@ def install(role=None, pypi_mirror=env.pypi_mirror):
     local('brew link --overwrite ruby')
     local('gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/')
     local('sudo gem update --system')
-    puts(green('安装 GitHub Desktop, Google Chrome, Visual Studio Code'))
-    local('brew cask install github google-chrome visual-studio-code')
-    puts(green('安装 BearyChat, Charles, Dash, Postman'))
-    local('brew cask install bearychat charles dash postman')
+    puts(green('{} GitHub Desktop, Google Chrome, Visual Studio Code'.format('安装' if is_cask else '跳过')))
+    if is_cask:
+        local('brew cask install github google-chrome visual-studio-code')
+    puts(green('{} BearyChat, Charles, Dash, Postman'.format('安装' if is_cask else '跳过')))
+    if is_cask:
+        local('brew cask install bearychat charles dash postman')
     if role.lower() in ['wiki']:
         puts(green('安装 gollum'))  # https://github.com/gollum/gollum/wiki/Installation
         local('brew install icu4c')
@@ -95,7 +100,7 @@ def install(role=None, pypi_mirror=env.pypi_mirror):
     local('brew cask cleanup')
     local('sudo gem clean')
     puts(green('配置 .bash_profile'))
-    curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile')
+    curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile', is_proxy)
 
 
 @task
@@ -131,5 +136,5 @@ def update(pypi_mirror=env.pypi_mirror):
     puts(cyan('更新完毕\n如果更新了python, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
 
 
-def curl(command=''):
-    local('curl -fsSL{} {}'.format(' -x {}'.format(env.proxy) if env.proxy else '', command))
+def curl(command='', is_proxy=True):
+    local('curl -fsSL{} {}'.format(' -x {}'.format(env.proxy) if is_proxy and env.proxy else '', command))

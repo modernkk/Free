@@ -12,7 +12,7 @@ Download fabfile.py and run install
 ```bash
 cd ~
 curl -fsSL -O https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py
-fab install:[python, ios, android]
+fab install
 ```
 
 ### Vendor
