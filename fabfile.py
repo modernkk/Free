@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.7.0'
+env.version = '0.7.1'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 # env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -94,10 +94,10 @@ def install(role=None, pypi_mirror=env.pypi_mirror):
         local('brew install mysql redis gettext')
         puts(green('安装 Transifex Command-Line Tool'))
         local('sudo -H pip3 install transifex-client{}'.format(pypi_mirror))
-        puts(green('安装 Docker, MySQL Workbench'))
-        local('brew cask install docker mysqlworkbench')
+        puts(green('{} Docker, MySQL Workbench'.format('安装' if is_cask else '跳过')))
+        if is_cask:
+            local('brew cask install docker mysqlworkbench')
     local('brew cleanup')
-    local('brew cask cleanup')
     local('sudo gem clean')
     puts(green('配置 .bash_profile'))
     curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile', is_proxy)
