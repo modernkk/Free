@@ -104,12 +104,12 @@ def install(role=None, pypi_mirror=env.pypi_mirror):
 
 
 @task
-def update(pypi_mirror=env.pypi_mirror):
+def update(is_proxy=True, pypi_mirror=env.pypi_mirror):
     """更新工具包"""
     puts(cyan('更新自己 当前版本 {} 更新在下次执行时生效'.format(env.version)))
-    curl('-O https://raw.githubusercontent.com/nyssance/Free/master/fabfile.py')
+    curl('-O https://raw.githubusercontent.com/nyssance/Free/master/fabfile.py', is_proxy)
     puts(cyan('更新 bash_profile'))
-    curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile')
+    curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile', is_proxy)
     puts(cyan('更新 Homebrew'))
     local('brew upgrade')
     local('brew cleanup')
