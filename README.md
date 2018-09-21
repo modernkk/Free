@@ -16,7 +16,7 @@ fab install
 ```
 
 ### Vendor
-- [Fabric](http://www.fabfile.org)
+- [Fabric](https://www.fabfile.org)
 - [Homebrew](https://brew.sh/)
 - [Java](https://www.java.com)
 - [Python](https://www.python.org)

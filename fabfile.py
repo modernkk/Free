@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.7.1'
+env.version = '0.7.2'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 # env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -31,7 +31,7 @@ def hello():
 
 
 @task
-def install(role=None, pypi_mirror=env.pypi_mirror):
+def install(pypi_mirror=env.pypi_mirror):
     """初始化工具包, 例如 fab install:ios"""
     role = raw_input('请输入角色 [all, android, ios, macos, node, python, django, wiki, jekyll]: ')
     confirm = raw_input('是否使用 brew cask 安装 常用软件 (速度较慢) ? [y/N]: ')
