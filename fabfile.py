@@ -136,5 +136,14 @@ def update(is_proxy=True, pypi_mirror=env.pypi_mirror):
     puts(cyan('更新完毕\n如果更新了python, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby'))
 
 
+@task
+def clean():
+    """清理"""
+    # -aIx 是删除所有, -n /usr/local/bin 是防止 OS X 上无权限
+    # SO: https://stackoverflow.com/questions/8095209/uninstall-all-installed-gems-in-osx#8095234
+    # SO: https://stackoverflow.com/questions/2893889/how-do-i-fix-the-you-dont-have-write-permissions-into-the-usr-bin-directory#34989655
+    local('sudo gem uninstall -aIx -n /usr/local/bin')
+
+
 def curl(command='', is_proxy=True):
     local('curl -fsSL{} {}'.format(' -x {}'.format(env.proxy) if is_proxy and env.proxy else '', command))
