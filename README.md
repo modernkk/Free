@@ -11,7 +11,7 @@ sudo -H pip install Fabric==1.14 -i https://pypi.douban.com/simple/
 Download fabfile.py and run install
 ```bash
 cd ~
-curl -fsSL -O https://raw.githubusercontent.com/nypisces/Free/master/fabfile.py
+curl -fsSL -O https://raw.githubusercontent.com/nyssance/Free/master/fabfile.py
 fab install
 ```
 
