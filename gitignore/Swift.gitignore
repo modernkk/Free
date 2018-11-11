@@ -1,7 +1,4 @@
-# __Xcode__
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
-
+# https://github.com/github/gitignore/blob/master/Swift.gitignore
 ## Build generated
 build/
 DerivedData/
@@ -77,7 +74,7 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-# __macOS__
+# https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 # General
 .DS_Store
 .AppleDouble
@@ -105,7 +102,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# R.swift
+# https://github.com/mac-cain13/R.swift
 *.generated.swift
 
 # __Fabric__

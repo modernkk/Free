@@ -8,7 +8,7 @@ from fabric.operations import local
 from fabric.state import env
 from fabric.utils import puts
 
-env.version = '0.7.2'
+env.version = '0.7.3'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 # env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -88,12 +88,12 @@ def install(pypi_mirror=env.pypi_mirror):
         puts(green('安装 Python'))
         local('brew install python')
         puts(green('安装 Pylint, Flake8, YAPF, twine, virtualenvwrapper'))  # 上传到pypi需要twine
-        local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
+        local('sudo -H pip install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
     if role.lower() in ['all', 'django']:
         puts(green('安装 MySQL, Redis, gettext'))
         local('brew install mysql redis gettext')
         puts(green('安装 Transifex Command-Line Tool'))
-        local('sudo -H pip3 install transifex-client{}'.format(pypi_mirror))
+        local('sudo -H pip install transifex-client{}'.format(pypi_mirror))
         puts(green('{} Docker, MySQL Workbench'.format('安装' if is_cask else '跳过')))
         if is_cask:
             local('brew cask install docker mysqlworkbench')
@@ -119,13 +119,13 @@ def update(is_proxy=True, pypi_mirror=env.pypi_mirror):
     if os.path.exists('/usr/local/bin/node'):
         puts(cyan('更新 npm'))
         local('npm update -g')
-    if os.path.exists('/usr/local/bin/pip3'):
+    if os.path.exists('/usr/local/bin/python3'):
         puts(cyan('更新 pip, Pylint, Flake8, YAPF, twine, virtualenvwrapper'))
-        local('sudo -H pip3 install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
+        local('sudo -H pip install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
         puts(cyan('更新 Transifex Command-Line Tool'))
-        local('sudo -H pip3 install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_mirror))
+        local('sudo -H pip install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_mirror))
     puts(cyan('更新 Fabric, isort, requests'))
-    # local('sudo -H pip2 install -U pip{}'.format(pypi_mirror))  # 更新pip2会引起pip3失效
+    # local('sudo -H pip2 install -U pip{}'.format(pypi_mirror))  # 更新pip2会引起python3 pip失效
     local('sudo -H pip2 install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_mirror))
     puts(cyan('更新 RubyGems'))
     local('gem sources')
@@ -139,6 +139,7 @@ def update(is_proxy=True, pypi_mirror=env.pypi_mirror):
 @task
 def clean():
     """清理"""
+    local('brew prune')
     # -aIx 是删除所有, -n /usr/local/bin 是防止 OS X 上无权限
     # SO: https://stackoverflow.com/questions/8095209/uninstall-all-installed-gems-in-osx#8095234
     # SO: https://stackoverflow.com/questions/2893889/how-do-i-fix-the-you-dont-have-write-permissions-into-the-usr-bin-directory#34989655

@@ -5,7 +5,7 @@ from fabric2 import task
 from fabric2.util import get_local_user
 from invoke import env
 
-env.version = '0.7.2'
+env.version = '0.7.3'
 env.colorize_errors = True
 env.proxy = '127.0.0.1:1087'
 # env.pypi_mirror = ' -i https://mirrors.aliyun.com/pypi/simple/'  # 如果是 http 地址，加 --trusted-host mirrors.aliyun.com
@@ -43,7 +43,7 @@ def install(c, pypi_mirror=env.pypi_mirror):
     is_proxy = confirm.lower() in ['ok', 'y', 'yes']
     print(Fore.GREEN + '安装 Fabric ( 修正 six, 以免以后执行 fab update 报错 ), isort, requests')  # https://github.com/pypa/pip/issues/3165
     # c.local('sudo -H pip2 install -U Fabric==1.14{} --ignore-installed six'.format(pypi_mirror))
-    c.local('sudo -H pip3 install fabric isort requests{}'.format(pypi_mirror))
+    c.local('sudo -H pip install fabric isort requests{}'.format(pypi_mirror))
     if not os.path.exists('/usr/local/bin/brew'):
         print(Fore.GREEN + '安装 Homebrew')
         c.local('/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
@@ -91,12 +91,12 @@ def install(c, pypi_mirror=env.pypi_mirror):
         print(Fore.GREEN + '安装 Python')
         c.local('brew install python')
         print(Fore.GREEN + '安装 Pylint, Flake8, YAPF, twine, virtualenvwrapper')  # 上传到pypi需要twine
-        c.local('sudo -H pip3 install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
+        c.local('sudo -H pip install pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
     if role.lower() in ['all', 'django']:
         print(Fore.GREEN + '安装 MySQL, Redis, gettext')
         c.local('brew install mysql redis gettext')
         print(Fore.GREEN + '安装 Transifex Command-Line Tool')
-        c.local('sudo -H pip3 install transifex-client{}'.format(pypi_mirror))
+        c.local('sudo -H pip install transifex-client{}'.format(pypi_mirror))
         print(Fore.GREEN + '{} Docker, MySQL Workbench'.format('安装' if is_cask else '跳过'))
         if is_cask:
             c.local('brew cask install docker mysqlworkbench')
@@ -123,14 +123,14 @@ def update(c, is_proxy=True, pypi_mirror=env.pypi_mirror):
     if os.path.exists('/usr/local/bin/node'):
         print(Fore.CYAN + '更新 npm')
         c.local('npm update -g')
-    if os.path.exists('/usr/local/bin/pip3'):
+    if os.path.exists('/usr/local/bin/python3'):
         print(Fore.CYAN + '更新 pip, Pylint, Flake8, YAPF, twine, virtualenvwrapper')
-        c.local('sudo -H pip3 install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
+        c.local('sudo -H pip install -U --upgrade-strategy=eager pip pylint flake8 yapf twine virtualenvwrapper{}'.format(pypi_mirror))
         print(Fore.CYAN + '更新 Transifex Command-Line Tool')
-        c.local('sudo -H pip3 install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_mirror))
+        c.local('sudo -H pip install -U --upgrade-strategy=eager transifex-client{}'.format(pypi_mirror))
     print(Fore.CYAN + '更新 Fabric, isort, requests')
-    # c.local('sudo -H pip2 install -U pip{}'.format(pypi_mirror))  # 更新pip2会引起pip3失效
-    c.local('sudo -H pip3 install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_mirror))
+    # c.local('sudo -H pip2 install -U pip{}'.format(pypi_mirror))  # 更新pip2会引起python3 pip失效
+    c.local('sudo -H pip install -U --upgrade-strategy=eager Fabric==1.14 isort requests{}'.format(pypi_mirror))
     print(Fore.CYAN + '更新 RubyGems')
     c.local('gem sources')
     c.local('sudo gem update --system')
@@ -143,6 +143,7 @@ def update(c, is_proxy=True, pypi_mirror=env.pypi_mirror):
 @task(hosts=['local'])
 def clean(c):
     """清理"""
+    local('brew prune')
     # -aIx 是删除所有, -n /usr/local/bin 是防止 OS X 上无权限
     # SO: https://stackoverflow.com/questions/8095209/uninstall-all-installed-gems-in-osx#8095234
     # SO: https://stackoverflow.com/questions/2893889/how-do-i-fix-the-you-dont-have-write-permissions-into-the-usr-bin-directory#34989655
