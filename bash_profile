@@ -22,6 +22,9 @@ fi
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
 
+# Ruby
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+
 # virtualenvwrapper
 export WORKON_HOME=~/Envs
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3

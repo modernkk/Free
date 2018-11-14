@@ -101,7 +101,7 @@ def install(c, pypi_mirror=env.pypi_mirror):
         if is_cask:
             c.local('brew cask install docker mysqlworkbench')
     c.local('brew cleanup')
-    c.local('sudo gem clean')
+    c.local('sudo gem cleanup')
     print(Fore.GREEN + '配置 .bash_profile')
     curl('-o .bash_profile https://raw.githubusercontent.com/nyssance/Free/master/bash_profile', is_proxy)
 
@@ -135,20 +135,21 @@ def update(c, is_proxy=True, pypi_mirror=env.pypi_mirror):
     c.local('gem sources')
     c.local('sudo gem update --system')
     c.local('sudo gem update')
-    c.local('sudo gem clean')
+    c.local('sudo gem cleanup')
     c.local('brew cask outdated')
     print(Fore.CYAN + '更新完毕\n如果更新了python, 需要重新创建虚拟环境\n如果更新了ruby, 可能需要 brew link --overwrite ruby')
 
 
 @task(hosts=['local'])
-def clean(c):
+def cleanup(c):
     """清理"""
-    local('brew prune')
+    c.local('brew prune')
+    c.local('brew cleanup')
     # -aIx 是删除所有, -n /usr/local/bin 是防止 OS X 上无权限
     # SO: https://stackoverflow.com/questions/8095209/uninstall-all-installed-gems-in-osx#8095234
     # SO: https://stackoverflow.com/questions/2893889/how-do-i-fix-the-you-dont-have-write-permissions-into-the-usr-bin-directory#34989655
     c.local('sudo gem uninstall -aIx -n /usr/local/bin')
-
+    c.local('sudo gem cleanup')
 
 def curl(c, command='', is_proxy=True):
     c.local('curl -fsSL{} {}'.format(' -x {}'.format(env.proxy) if is_proxy and env.proxy else '', command))
