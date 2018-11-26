@@ -24,6 +24,7 @@ export PATH="/usr/local/sbin:$PATH"
 
 # Ruby
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="/usr/local/lib/ruby/gems/2.5.0/bin:$PATH"
 
 # virtualenvwrapper
 export WORKON_HOME=~/Envs
